@@ -91,12 +91,16 @@ defmodule Browser do
 
   def full_platform_name(input) do
     case platform(input) do
+      :adobe_air -> ["Adobe AIR", adobe_air_version(input)]
+      :windows_phone -> ["Windows Phone", windows_phone_version(input)]
+      :windows_mobile -> "Windows Mobile"
       :ios -> ["iOS", ios_version(input)]
       :android -> ["Android", android_version(input)]
       :linux -> "Linux"
-      :mac -> ["MacOS", mac_version(input), mac_version_name(input)]
+      :mac -> [mac_name(input), mac_version(input), mac_version_name(input)]
       :windows -> ["Windows", windows_version_name(input)]
-      :chrome_os -> "ChromeOS"
+      :chrome_os -> ["ChromeOS", chrome_os_version(input)]
+      :firefox_os -> "Firefox OS"
       :blackberry -> ["BlackBerry", blackberry_version(input)]
       :other -> "Other"
     end
@@ -216,7 +220,7 @@ defmodule Browser do
   end
 
   def uc_browser?(input) do
-    input |> Ua.to_ua |> String.match?(~r/(UCBrowser)/)
+    input |> Ua.to_ua |> String.match?(~r/UCBrowser/)
   end
 
   def silk?(input) do
@@ -235,9 +239,7 @@ defmodule Browser do
 
   def blackberry_version(input) do
     ua = Ua.to_ua(input)
-    (Regex.run(~r/BB(10)/, ua) ||
-     Regex.run(~r/BlackBerry\d+\/(\d+)/, ua) ||
-     Regex.run(~r/BlackBerry.*?Version\/(\d+)/, ua) || []) |> Enum.at(1)
+    (Regex.run(~r/(?:Version|BlackBerry[\da\-z]+)\/([\d.]+)/, ua) || []) |> Enum.at(1)
   end
 
   def blackberry?(input, version \\ nil) do
@@ -350,7 +352,7 @@ defmodule Browser do
 
   def playbook?(input) do
     ua = Ua.to_ua(input)
-    String.match?(ua, ~r/PlayBook/) and String.match?(ua, ~r/RIM Tablet/)
+    String.match?(ua, ~r/PlayBook.*?RIM Tablet/)
   end
 
   def windows_touchscreen_desktop?(input) do
@@ -440,7 +442,12 @@ defmodule Browser do
   end
 
   def adobe_air?(input) do
-    input |> Ua.to_ua |> String.match?(~r/adobeair/i)
+    input |> Ua.to_ua |> String.match?(~r/AdobeAIR/)
+  end
+
+  def adobe_air_version(input) do
+    ua = Ua.to_ua(input)
+    (Regex.run(~r/AdobeAIR\/([\d.]+)/, ua) || []) |> Enum.at(1)
   end
 
   defp detect_mobile?(ua) do
@@ -467,11 +474,17 @@ defmodule Browser do
   end
 
   def ios_version(input) do
-    Enum.at(Regex.run(~r/OS (\d+)/, Ua.to_ua(input)) || [], 1)
+    res = Regex.run(~r/OS (?<major>\d+)_(?<minor>\d+)_?(?<patch>\d+)?/, Ua.to_ua(input))
+    case res do
+      [_, major, minor, patch | _] -> major <> "." <> minor <> "." <> patch
+      [_, major, minor] -> major <> "." <> minor
+      [_, major] -> major
+      _ -> nil
+    end
   end
 
   def mac?(input) do
-    (input |> Ua.to_ua |> String.match?(~r/Mac OS X/)) and not ios?(input)
+    (input |> Ua.to_ua |> String.match?(~r/Mac/)) and not ios?(input)
   end
 
   def mac_version(input) do
@@ -481,8 +494,21 @@ defmodule Browser do
     end
   end
 
+  def mac_name(input) do
+    case Enum.at(Regex.run(~r/(\d+\.\d+)/, mac_version(input)) || [], 1) do
+      "10." <> v ->
+        case Integer.parse(v) do
+          {num, _} when num >= 12 -> "macOS"
+          {num, _} when num < 12 -> "Mac OS X"
+          _ -> "Mac OS X"
+        end
+      _ -> "Mac OS X"
+    end
+  end
+
   def mac_version_name(input) do
     case Enum.at(Regex.run(~r/(\d+\.\d+)/, mac_version(input)) || [], 1) do
+      "10.15" -> "Catalina"
       "10.14" -> "Mojave"
       "10.13" -> "High Sierra"
       "10.12" -> "Sierra"
@@ -519,6 +545,11 @@ defmodule Browser do
       windows10?(input) -> "10"
       true -> ""
     end
+  end
+
+  def windows_phone_version(input) do
+    ua = Ua.to_ua(input)
+    (Regex.run(~r/Windows Phone ([\d.]+)/, ua) || []) |> Enum.at(1)
   end
 
   def windows_xp?(input) do
@@ -577,15 +608,29 @@ defmodule Browser do
     input |> Ua.to_ua |> String.match?(~r/CrOS/)
   end
 
+  def chrome_os_version(input) do
+    ua = Ua.to_ua(input)
+    (Regex.run(~r/CrOS(?: x86_64)? ([\d.]+)/, ua) || []) |> Enum.at(1)
+  end
+
+  def firefox_os?(input) do
+    ua = input |> Ua.to_ua
+    not String.match?(ua, ~r/(Android|Linux|BlackBerry|Windows|Mac)/) and String.match?(ua, ~r/Firefox/)
+  end
+
   def platform(input) do
     cond do
-      ios?(input) -> :ios
-      android?(input) -> :android
-      linux?(input) -> :linux
-      mac?(input) -> :mac
-      windows?(input) -> :windows
+      adobe_air?(input) -> :adobe_air
       chrome_os?(input) -> :chrome_os
+      windows_mobile?(input) -> :windows_mobile
+      windows_phone?(input) -> :windows_phone
+      android?(input) -> :android
       blackberry?(input) -> :blackberry
+      ios?(input) -> :ios
+      mac?(input) -> :mac
+      firefox_os?(input) -> :firefox_os
+      windows?(input) -> :windows
+      linux?(input) -> :linux
       true -> :other
     end
   end

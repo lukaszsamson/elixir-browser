@@ -63,7 +63,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "Apple CoreMedia"
     assert Browser.full_browser_name(ua) == "Apple CoreMedia 1.0.0.10F569"
-    assert Browser.full_display(ua) == "Apple CoreMedia 1.0.0.10F569 on MacOS"
+    assert Browser.full_display(ua) == "Apple CoreMedia 1.0.0.10F569 on Mac OS X"
     assert Browser.core_media?(ua)
     assert Browser.full_version(ua) == "1.0.0.10F569"
     assert Browser.version(ua) == "1"
@@ -74,7 +74,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "PhantomJS"
     assert Browser.full_browser_name(ua) == "PhantomJS 1.9.0"
-    assert Browser.full_display(ua) == "PhantomJS 1.9.0 on MacOS"
+    assert Browser.full_display(ua) == "PhantomJS 1.9.0 on Mac OS X"
     assert Browser.phantom_js?(ua)
     refute Browser.tablet?(ua)
     refute Browser.mobile?(ua)
@@ -268,9 +268,10 @@ defmodule BrowserTest do
     assert Browser.webkit?(ua)
     assert Browser.version(ua) == "13"
     assert Browser.full_version(ua) == "13.0"
+    # TODO
     assert Browser.name(ua) == "Other"
     assert Browser.full_browser_name(ua) == "Other 13.0"
-    assert Browser.full_display(ua) == "Other 13.0 on MacOS"
+    assert Browser.full_display(ua) == "Other 13.0 on Adobe AIR 13.0"
   end
 
   # android
@@ -386,8 +387,8 @@ defmodule BrowserTest do
 
     assert Browser.name(ua), "BlackBerry"
     assert Browser.full_browser_name(ua) == "BlackBerry 4.2.1"
-    assert Browser.full_display(ua) == "BlackBerry 4.2.1 on BlackBerry 4"
-    assert Browser.blackberry_version(ua) == "4"
+    assert Browser.full_display(ua) == "BlackBerry 4.2.1 on BlackBerry 4.2.1"
+    assert Browser.blackberry_version(ua) == "4.2.1"
     assert Browser.blackberry?(ua, 4)
     refute Browser.tablet?(ua)
     assert Browser.mobile?(ua)
@@ -401,9 +402,9 @@ defmodule BrowserTest do
 
     assert Browser.name(ua), "BlackBerry"
     assert Browser.full_browser_name(ua) == "BlackBerry 5.0.0.93"
-    assert Browser.full_display(ua) == "BlackBerry 5.0.0.93 on BlackBerry 5"
+    assert Browser.full_display(ua) == "BlackBerry 5.0.0.93 on BlackBerry 5.0.0.93"
     assert Browser.blackberry?(ua, 5)
-    assert Browser.blackberry_version(ua) == "5"
+    assert Browser.blackberry_version(ua) == "5.0.0.93"
     refute Browser.tablet?(ua)
     assert Browser.mobile?(ua)
     refute Browser.modern?(ua)
@@ -416,9 +417,9 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) =="Safari"
     assert Browser.full_browser_name(ua) == "Safari 534.11"
-    assert Browser.full_display(ua) == "Safari 534.11 on BlackBerry 6"
+    assert Browser.full_display(ua) == "Safari 534.11 on BlackBerry 6.0.0.141"
     assert Browser.blackberry?(ua, 6)
-    assert Browser.blackberry_version(ua) == "6"
+    assert Browser.blackberry_version(ua) == "6.0.0.141"
     refute Browser.tablet?(ua)
     assert Browser.mobile?(ua)
     assert Browser.modern?(ua)
@@ -431,9 +432,9 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) =="Safari"
     assert Browser.full_browser_name(ua) == "Safari 534.11"
-    assert Browser.full_display(ua) == "Safari 534.11 on BlackBerry 7"
+    assert Browser.full_display(ua) == "Safari 534.11 on BlackBerry 7.0.0.1"
     assert Browser.blackberry?(ua, 7)
-    assert Browser.blackberry_version(ua) == "7"
+    assert Browser.blackberry_version(ua) == "7.0.0.1"
     refute Browser.tablet?(ua)
     assert Browser.mobile?(ua)
     assert Browser.modern?(ua)
@@ -446,8 +447,8 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) =="Safari"
     assert Browser.full_browser_name(ua) == "Safari 10.0.9.1675"
-    assert Browser.full_display(ua) == "Safari 10.0.9.1675 on BlackBerry 10"
-    assert Browser.blackberry_version(ua) =="10"
+    assert Browser.full_display(ua) == "Safari 10.0.9.1675 on BlackBerry 10.0.9.1675"
+    assert Browser.blackberry_version(ua) =="10.0.9.1675"
     assert Browser.blackberry?(ua, 10)
     refute Browser.tablet?(ua)
     assert Browser.mobile?(ua)
@@ -616,7 +617,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) =="Chrome"
     assert Browser.full_browser_name(ua) == "Chrome 5.0.375.99"
-    assert Browser.full_display(ua) == "Chrome 5.0.375.99 on MacOS 10.6.4 Snow Leopard"
+    assert Browser.full_display(ua) == "Chrome 5.0.375.99 on Mac OS X 10.6.4 Snow Leopard"
     assert Browser.chrome?(ua)
     refute Browser.safari?(ua)
     assert Browser.webkit?(ua)
@@ -630,7 +631,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) =="Chrome"
     assert Browser.full_browser_name(ua) == "Chrome 19.0.1084.60"
-    assert Browser.full_display(ua) == "Chrome 19.0.1084.60 on iOS 5"
+    assert Browser.full_display(ua) == "Chrome 19.0.1084.60 on iOS 5.1.1"
     assert Browser.chrome?(ua)
     refute Browser.safari?(ua)
     assert Browser.webkit?(ua)
@@ -1003,7 +1004,7 @@ defmodule BrowserTest do
     assert Browser.id(ua) == :edge
     assert Browser.name(ua) == "Microsoft Edge"
     assert Browser.full_browser_name(ua) == "Microsoft Edge 12.0"
-    assert Browser.full_display(ua) == "Microsoft Edge 12.0 on Android 4.2.1"
+    assert Browser.full_display(ua) == "Microsoft Edge 12.0 on Windows Phone 10.0"
     assert Browser.full_version(ua) == "12.0"
     assert Browser.version(ua) == "12"
     refute Browser.windows10?(ua)
@@ -1083,7 +1084,7 @@ defmodule BrowserTest do
     assert Browser.ie?(ua)
     assert Browser.name(ua) == "Internet Explorer"
     assert Browser.full_browser_name(ua) == "Internet Explorer 11.0"
-    assert Browser.full_display(ua) == "Internet Explorer 11.0 on iOS 7"
+    assert Browser.full_display(ua) == "Internet Explorer 11.0 on Windows Phone 8.1"
     assert Browser.id(ua) == :ie
     assert Browser.version(ua) == "11"
     assert Browser.full_version(ua) == "11.0"
@@ -1198,7 +1199,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "iPhone"
     assert Browser.full_browser_name(ua) == "iPhone 3.0"
-    assert Browser.full_display(ua) == "iPhone 3.0 on iOS 3"
+    assert Browser.full_display(ua) == "iPhone 3.0 on iOS 3.0"
     assert Browser.iphone?(ua)
     assert Browser.safari?(ua)
     assert Browser.webkit?(ua)
@@ -1216,7 +1217,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "Safari"
     assert Browser.full_browser_name(ua) == "Safari 5.0.1"
-    assert Browser.full_display(ua) == "Safari 5.0.1 on MacOS 10.6.4 Snow Leopard"
+    assert Browser.full_display(ua) == "Safari 5.0.1 on Mac OS X 10.6.4 Snow Leopard"
     assert Browser.safari?(ua)
     assert Browser.webkit?(ua)
     assert Browser.modern?(ua)
@@ -1255,7 +1256,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "iPad"
     assert Browser.full_browser_name(ua) == "iPad 4.0.4"
-    assert Browser.full_display(ua) == "iPad 4.0.4 on iOS 3"
+    assert Browser.full_display(ua) == "iPad 4.0.4 on iOS 3.2"
     assert Browser.ipad?(ua)
     assert Browser.safari?(ua)
     assert Browser.webkit?(ua)
@@ -1273,7 +1274,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "iPad"
     assert Browser.full_browser_name(ua) == "iPad 13.1.72140"
-    assert Browser.full_display(ua) == "iPad 13.1.72140 on iOS 9"
+    assert Browser.full_display(ua) == "iPad 13.1.72140 on iOS 9.3.2"
     assert Browser.ipad?(ua)
     assert Browser.safari?(ua)
     assert Browser.webkit?(ua)
@@ -1377,7 +1378,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "Opera"
     assert Browser.full_browser_name(ua) == "Opera 11.64"
-    assert Browser.full_display(ua) == "Opera 11.64 on MacOS 10.7.4 Lion"
+    assert Browser.full_display(ua) == "Opera 11.64 on Mac OS X 10.7.4 Lion"
     assert Browser.opera?(ua)
     refute Browser.modern?(ua)
     assert Browser.full_version(ua) == "11.64"
@@ -1389,7 +1390,7 @@ defmodule BrowserTest do
 
     assert Browser.name(ua) == "Opera"
     assert Browser.full_browser_name(ua) == "Opera 15.0.1147.44"
-    assert Browser.full_display(ua) == "Opera 15.0.1147.44 on MacOS 10.8.4 Mountain Lion"
+    assert Browser.full_display(ua) == "Opera 15.0.1147.44 on Mac OS X 10.8.4 Mountain Lion"
     assert Browser.id(ua) == :opera
     assert Browser.opera?(ua)
     assert Browser.webkit?(ua)
